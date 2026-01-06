@@ -10,8 +10,7 @@ const log=debug('api_base:mongoose');
 //   .then(() => log('Conectado ao MongoDB com sucesso'))
 //   .catch(err => log('Falha ao conectar ao MongoDB', err));
 
-// mongoose.connect(`${config.get('mongo.uri')}`)
-mongoose.connect('mongodb+srv://listagemapidb:Mt4HNOtKde9MI3wg@listagedb.6tslclw.mongodb.net/?retryWrites=true&w=majority&appName=listagedb')
+mongoose.connect(`${config.get('mongoURI')}`)
 .then(() => log('Conectado ao MongoDB com sucesso'))
   .catch(err => log('Falha ao conectar ao MongoDB', err));
 

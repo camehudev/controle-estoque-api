@@ -32,7 +32,7 @@ routes.post('/api/v1/resumo/create', Movimentacao.create);
 
 */
 
-routes.get('/api/v1/usuario/list', Usuario.list);
+routes.get('/api/v1/usuario/list',Usuario.list);
 
 
 
