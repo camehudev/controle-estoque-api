@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Home from '../controller/Home.js'
 import Usuario from '../controller/Usuario.js';
+import Produto from '../controller/Produto.js';
 import Movimentacao from '../controller/Movimentacao.js';
 import authMiddleware from '../util/verifyToken.js';
 import { celebrate } from 'celebrate';
@@ -32,7 +33,8 @@ routes.post('/api/v1/resumo/create', Movimentacao.create);
 
 */
 
-routes.get('/api/v1/usuario/list',Usuario.list);
+routes.get('/api/v1/usuario/list', Usuario.list);
+routes.get ('/api/v1/produtos/list', Produto.list)
 
 
 
