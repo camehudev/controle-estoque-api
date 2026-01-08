@@ -12,8 +12,8 @@ if (!secret) {
 const token = {
     create(data) {
         return jwt.sign(
-        { sub: data.email }, // payload precisa ser um objeto
-        process.env.SECRET,
+        { sub: data.userName }, // payload precisa ser um objeto
+        process.env.API_SECRET,
         {
             algorithm: 'HS256',
             expiresIn: '1h'
@@ -24,7 +24,7 @@ const token = {
 
     validToken(){
         const authHeader = req.headers['authorization'];
-       const isValidtoken = jwt.verify(authHeader, process.env.SECRET, function(err, decoded) {
+       const isValidtoken = jwt.verify(authHeader, process.env.API_SECRET, function(err, decoded) {
             // console.log(decoded.foo) // bar
           });
 

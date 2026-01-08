@@ -33,8 +33,12 @@ routes.post('/api/v1/resumo/create', Movimentacao.create);
 
 */
 
-routes.get('/api/v1/usuario/list', Usuario.list);
-routes.get ('/api/v1/produtos/list', Produto.list)
+routes.get('/usuario/list', Usuario.list);
+routes.get ('/produtos/list', Produto.list);
+routes.post('/usuario/nUsuario', Usuario.create());
+routes.post('/usuario/search', Usuario.index);
+
+
 
 
 

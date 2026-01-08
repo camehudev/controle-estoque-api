@@ -9,7 +9,7 @@ app.use(cors()); // Permite todas as origens
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use(routes);
+app.use('/api/v1', routes);
 app.use(errors());
 
 app.use((req, res, next)=>{

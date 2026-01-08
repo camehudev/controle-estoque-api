@@ -20,6 +20,7 @@ const loginSchema = {
         'string.min': 'A senha deve ter no mínimo {#limit} caracteres',
         'any.required': 'A senha é obrigatório'
       }),
+
   })
 };
 

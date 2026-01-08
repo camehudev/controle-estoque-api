@@ -11,9 +11,8 @@ const UsuarioBase={
         return model.find()
     },
 
-    async buscarUser(data){
-      return await model.findOne({userName: data})
-      
+    async buscarUser(data){     
+      return await model.findOne({userName: data});      
     },
 
     async create(data) {

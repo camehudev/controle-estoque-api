@@ -13,6 +13,16 @@ const userSchema = Joi.object({
       'any.required': 'O nome é obrigatório'
     }),
 
+    email: Joi.string()
+    .min(3)
+    .required()
+    .messages({
+      'string.base': 'O email deve ser um texto',
+      'string.empty': 'O email é obrigatório',
+      'string.min': 'O email deve ter no mínimo {#limit} caracteres',
+      'any.required': 'O email é obrigatório'
+    }),
+
     passUser: Joi.string()
     .min(6)
     .required()
