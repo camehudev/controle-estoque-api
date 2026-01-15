@@ -34,7 +34,7 @@ routes.post('/api/v1/resumo/create', Movimentacao.create);
 */
 
 routes.get('/usuario/list', Usuario.list);
-routes.get ('/produtos/list', Produto.list);
+routes.get ('/produtos/list', authMiddleware, Produto.list);
 routes.post('/usuario/nUsuario', Usuario.create());
 routes.post('/usuario/search', Usuario.index);
 
