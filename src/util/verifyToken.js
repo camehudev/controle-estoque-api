@@ -1,20 +1,25 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-const SECRET = process.env.API_SECRET;
+const secret = process.env.API_SECRET;
+
+if (!secret) {
+  throw new Error('API_SECRET não está definido');
+}
 
 const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ message: 'Token não fornecido' });
   }
 
-  const token = authHeader.split(' ')[1];
+  // remove "Bearer" mesmo se vier duplicado
+  const token = authHeader.replace(/Bearer\s+/g, '').trim();
 
   try {
-    const decoded = jwt.verify(token, SECRET);
+    const decoded = jwt.verify(token, secret);
     req.user = decoded;
-    next();
+    return next();
   } catch (err) {
     return res.status(403).json({ message: 'Token inválido ou expirado' });
   }
