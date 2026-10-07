@@ -1,23 +1,15 @@
-import mongoose from "mongoose";
-
-  const {Schema} = mongoose;
-  const MovimentoSchema = new Schema({
-    data: { type: Date, required: true },
-    descricao: { type: String, required: true },
-    s: { type: String, required: true },
-    donativos: {
-      entrada_d: { type: String, default: null },
-      saida_d: { type: String, default: null }
-    },
-    conta_bancaria: {
-      entrada: { type: String, default: null },
-      saida: { type: String, default: null }
-    },
-    outra: {
-      entrada: { type: String, default: null },
-      saida: { type: String, default: null }
-    }
-  
-  })
-  
-  export default MovimentoSchema
+// src/schema/movimento.js
+export const movimentoSchema = {
+  tableName: 'movimentos',
+  fields: {
+    data: 'DATE NOT NULL',
+    descricao: 'VARCHAR(255) NOT NULL',
+    s: 'VARCHAR(50) NOT NULL',
+    entrada_d: 'NUMERIC(10, 2)',
+    saida_d: 'NUMERIC(10, 2)',
+    entrada_banco: 'NUMERIC(10, 2)',
+    saida_banco: 'NUMERIC(10, 2)',
+    entrada_outra: 'NUMERIC(10, 2)',
+    saida_outra: 'NUMERIC(10, 2)'
+  }
+};

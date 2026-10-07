@@ -1,24 +1,16 @@
-import mongoose from "mongoose";
-
-  const {Schema} = mongoose;
-  const ResumoSchema = new Schema({
-    data: { type: Date, required: true },    
-    donativos: {
-      entrada_d: { type: String, default: null },
-      saida_d: { type: String, default: null },
-      total: { type: String, default: null }
-    },
-    conta_bancaria_cofre: {
-      entrada: { type: String, default: null },
-      saida: { type: String, default: null },
-      total: { type: String, default: null },
-    },
-    outra: {
-      entrada: { type: String, default: null },
-      saida: { type: String, default: null },
-      total: { type: String, default: null }
-    }
-  
-  })
-  
-  export default ResumoSchema
+// src/schema/resumo.js
+export const resumoSchema = {
+  tableName: 'resumos',
+  fields: {
+    data: 'DATE NOT NULL',
+    entrada_d: 'NUMERIC(10, 2)',
+    saida_d: 'NUMERIC(10, 2)',
+    total_donativos: 'NUMERIC(10, 2)',
+    entrada_banco: 'NUMERIC(10, 2)',
+    saida_banco: 'NUMERIC(10, 2)',
+    total_banco: 'NUMERIC(10, 2)',
+    entrada_outra: 'NUMERIC(10, 2)',
+    saida_outra: 'NUMERIC(10, 2)',
+    total_outra: 'NUMERIC(10, 2)'
+  }
+};

@@ -1,52 +1,47 @@
-import mongoose from "../db/mongoose.js";
-import schema from '../schema/usuario.js';
-import bcryptHash from '../util/bcryptPassWord.js'
+import pool from '../db/postgres.js'; // Ajuste o caminho para a sua conexão do postgres
+import bcryptHash from '../util/bcryptPassWord.js';
 
-const model = mongoose.model('Usuario', schema)
-
-const UsuarioBase={
-
-    list(){
-        const query={};
-        return model.find()
-    },
-
-    async buscarUser(data){     
-      return await model.findOne({userName: data});      
-    },
-
-    async create(data) {
-      try {
-        const hash = await bcryptHash.gerarHash(data.passUser);
-    
-        const objData = {
-          userName: data.userName,
-          passUser: hash,
-          tipoUser: data.tipoUser
-        };
-    
-        const usuario = new model(objData);
-        return await usuario.save(); // retorna a Promise da criação
-      } catch (error) {
-        
-        // Aqui você pode lançar o erro, logar, ou retornar algo mais útil
-        throw error; // ou return { error: error.message };
-      }
-    },
-
-  async byId(id) { 
-      return await model.findById({_id: id})     
+export default {
+  async list() {
+    const result = await pool.query('SELECT id, userName, email, tipoUser, created_at FROM usuarios');
+    return result.rows;
   },
 
-    updateById(id, data){
-      return model.updateOne({_id:id}, data)
+  async buscarUser(userName) {
+    const result = await pool.query('SELECT * FROM usuarios WHERE userName = $1', [userName]);
+    return result.rows[0];
+  },
 
-    },
-
-    delItemList(id){
-        return model.deleteOne({_id:id})
-
+  async create(data) {
+    try {
+      const hash = await bcryptHash.gerarHash(data.passUser);
+      const query = `
+        INSERT INTO usuarios (userName, email, passUser, tipoUser) 
+        VALUES ($1, $2, $3, $4) 
+        RETURNING id, userName, email, tipoUser, created_at;
+      `;
+      const values = [data.userName, data.email, hash, data.tipoUser];
+      const result = await pool.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      throw error;
     }
-}
+  },
 
-export default UsuarioBase
+  async byId(id) {
+    const result = await pool.query('SELECT id, userName, email, tipoUser, created_at FROM usuarios WHERE id = $1', [id]);
+    return result.rows[0];
+  },
+
+  async updateById(id, data) {
+    const query = `
+      UPDATE usuarios 
+      SET userName = $1, email = $2, tipoUser = $3 
+      WHERE id = $4 
+      RETURNING id, userName, email, tipoUser, created_at;
+    `;
+    const values = [data.userName, data.email, data.tipoUser, id];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+};

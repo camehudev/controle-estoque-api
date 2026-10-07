@@ -1,17 +1,15 @@
-import mongoose from "mongoose";
-
-const {Schema} = mongoose;
-const Despesa = new Schema({
-    data: String,
-    descricao:String,
-    valor:String,   
-    entrada_donativo: String,
-    saida_donativo:String,
-    entrada_conta:String,
-    saida_conta:String,
-    entrada_outra_conta: String,
-    saida_outra_conta: String
-
-})
-
-export default Despesa
+// src/schema/despesa.js
+export const despesaSchema = {
+  tableName: 'despesas',
+  fields: {
+    data: 'DATE NOT NULL',
+    descricao: 'VARCHAR(255) NOT NULL',
+    valor: 'NUMERIC(10, 2)',
+    entrada_donativo: 'NUMERIC(10, 2)',
+    saida_donativo: 'NUMERIC(10, 2)',
+    entrada_conta: 'NUMERIC(10, 2)',
+    saida_conta: 'NUMERIC(10, 2)',
+    entrada_outra_conta: 'NUMERIC(10, 2)',
+    saida_outra_conta: 'NUMERIC(10, 2)'
+  }
+};

@@ -1,18 +1,24 @@
-import mongoose from "../db/mongoose.js";
-import schema from '../schema/usuario.js';
-import bcryptHash from '../util/bcryptPassWord.js'
+import pool from '../db/postgres.js';
 
-const model = mongoose.model('Produto', schema);
+export default {
+  async list() {
+    const result = await pool.query('SELECT * FROM produtos');
+    return result.rows;
+  },
 
-const ProdutoBase={
+  async byId(id) {
+    const result = await pool.query('SELECT * FROM produtos WHERE id = $1', [id]);
+    return result.rows[0];
+  },
 
-     list(){
-        const query={};
-        return model.find()
-    },
-
-    
-
-}
-
-export default ProdutoBase
+  async create(data) {
+    const query = `
+      INSERT INTO produtos (nome, quantidade, preco) 
+      VALUES ($1, $2, $3) 
+      RETURNING *;
+    `;
+    const values = [data.nome, data.quantidade, data.preco];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+};

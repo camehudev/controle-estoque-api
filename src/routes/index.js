@@ -13,8 +13,8 @@ import paramSchema from '../schema/validations/paramsSchema.js';
 const routes = new Router();
 
 
-/* routes.post('/api/v1',Home.index);
-routes.get('/api/v1/list',celebrate(routerSchema), authMiddleware, Home.list);
+ routes.post('/api/v1/login',Home.index);
+/*routes.get('/api/v1/list',celebrate(routerSchema), authMiddleware, Home.list);
 routes.post('/api/v1/despesa',celebrate(routerSchema),authMiddleware, Home.create);
 routes.get('/api/v1/list/:id',celebrate(routerSchema,paramSchema),authMiddleware, Home.byId);
 routes.put('/api/v1/uplista/:id',celebrate(routerSchema, paramSchema),authMiddleware, Home.updateById);

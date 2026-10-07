@@ -1,39 +1,93 @@
-import mongoose from "../db/mongoose.js";
-import schema from '../schema/despesa.js';
+import pool from '../db/postgres.js';
 
-const model = mongoose.model('Despesa', schema)
+const APIBase = {
 
-const APIBase={
-
-    list(){
-        const query={};
-        return model.find(query)
+    async list() {
+        const query = 'SELECT * FROM despesas ORDER BY data DESC;';
+        const result = await pool.query(query);
+        return result.rows;
     },
 
-    buscarUser(data){
-       return model.findOne({userName: data})
+    async buscarUser(data) {
+        // Adaptado para procurar na tabela de despesas (ex: por descrição)
+        const query = 'SELECT * FROM despesas WHERE descricao = $1;';
+        const result = await pool.query(query, [data]);
+        return result.rows[0];
     },
 
-    create(data){
-      const despesa = new model(data);
-      return despesa.save();
+    async create(data) {
+        try {
+            const query = `
+                INSERT INTO despesas (
+                    data, descricao, valor, 
+                    entrada_donativo, saida_donativo, 
+                    entrada_conta, saida_conta, 
+                    entrada_outra_conta, saida_outra_conta
+                ) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+                RETURNING *;
+            `;
+            
+            const values = [
+                data.data,
+                data.descricao,
+                data.valor || 0,
+                data.entrada_donativo || 0,
+                data.saida_donativo || 0,
+                data.entrada_conta || 0,
+                data.saida_conta || 0,
+                data.entrada_outra_conta || 0,
+                data.saida_outra_conta || 0
+            ];
+
+            const result = await pool.query(query, values);
+            return result.rows[0];
+        } catch (error) {
+            console.error("Erro ao criar despesa:", error);
+            throw error;
+        }
     },
 
     async byId(id) {      
-      return await model.findOne({ _id:id });
-  },
-
-  
-
-    updateById(id, data){
-      return model.updateOne({_id:id}, data);
-
+        const query = 'SELECT * FROM despesas WHERE id = $1;';
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
     },
 
-    delItemList(id){
-        return model.deleteOne({_id:id})
+    async updateById(id, data) {
+        const query = `
+            UPDATE despesas 
+            SET data = $1, descricao = $2, valor = $3,
+                entrada_donativo = $4, saida_donativo = $5,
+                entrada_conta = $6, saida_conta = $7,
+                entrada_outra_conta = $8, saida_outra_conta = $9
+            WHERE id = $10 
+            RETURNING *;
+        `;
+        
+        const values = [
+            data.data,
+            data.descricao,
+            data.valor || 0,
+            data.entrada_donativo || 0,
+            data.saida_donativo || 0,
+            data.entrada_conta || 0,
+            data.saida_conta || 0,
+            data.entrada_outra_conta || 0,
+            data.saida_outra_conta || 0,
+            id
+        ];
 
+        const result = await pool.query(query, values);
+        return result.rows[0];
+    },
+
+    async delItemList(id) {
+        const query = 'DELETE FROM despesas WHERE id = $1 RETURNING *;';
+        const result = await pool.query(query, [id]);
+        return result.rows[0];
     }
-}
 
-export default APIBase
+};
+
+export default APIBase;
